@@ -3,6 +3,7 @@
     "description": "Yii2 jsonrpc API + debug console",
     "type": "yii2-extension",
     "require": {
+        "php": ">=5.4.0",
         "yiisoft/yii2": "~2"
     },
     "homepage": "https://github.com/voenniy/yii2-jsonrpc",
