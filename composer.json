@@ -1,0 +1,14 @@
+{
+    "name": "voenniy/yii2-jsonrpc-module",
+    "description": "Yii2 jsonrpc API + debug console",
+    "type": "yii2-extension",
+    "require": {
+        "yiisoft/yii2": "~2"
+    },
+    "authors": [
+        {
+            "name": "Олег Кучумов",
+            "email": "voenniy@gmail.com"
+        }
+    ]
+}
