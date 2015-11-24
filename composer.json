@@ -5,10 +5,25 @@
     "require": {
         "yiisoft/yii2": "~2"
     },
+    "homepage": "https://github.com/voenniy/yii2-jsonrpc",
+    "support": {
+        "issues": "https://github.com/voenniy/yii2-jsonrpc/issues",
+        "source": "https://github.com/voenniy/yii2-jsonrpc"
+    },
     "authors": [
         {
-            "name": "Олег Кучумов",
+            "name": "Oleg Kuchumov",
             "email": "voenniy@gmail.com"
         }
-    ]
+    ],
+    "keywords": [
+      "yii2",
+      "jsonrpc",
+      "module"    
+    ],
+    "autoload": {
+        "psr-4": {
+            "voenniy\jsonrpc\\": ""
+        }
+    },
 }
