@@ -1,5 +1,5 @@
 <?php
-namespace common\modules\jsonrpc\components;
+namespace voenniy\jsonrpc\components;
 
 /**
  * @author sergey.yusupov, alex.sharov

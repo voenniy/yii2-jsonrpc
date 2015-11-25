@@ -6,7 +6,7 @@
  * Time: 18:22
  */
 
-namespace common\modules\jsonrpc\components;
+namespace voenniy\jsonrpc\components;
 
 
 class JsonRPC  {

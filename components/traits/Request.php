@@ -1,5 +1,5 @@
 <?php
-namespace common\modules\jsonrpc\components\traits;
+namespace voenniy\jsonrpc\components\traits;
 
 trait Request {
 

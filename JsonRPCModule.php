@@ -1,8 +1,8 @@
 <?php
 
-namespace common\modules\jsonrpc;
+namespace voenniy\jsonrpc;
 
-use common\modules\jsonrpc\assets\JsonrpcAsset;
+use voenniy\jsonrpc\assets\JsonrpcAsset;
 
 class JsonRPCModule extends \yii\base\Module
 {

@@ -6,10 +6,10 @@
  * Time: 2:11 PM
  */
 
-namespace common\modules\jsonrpc\components;
+namespace voenniy\jsonrpc\components;
 
 
-use common\modules\jsonrpc\JsonRPCModule;
+use voenniy\jsonrpc\JsonRPCModule;
 
 class Base
 {

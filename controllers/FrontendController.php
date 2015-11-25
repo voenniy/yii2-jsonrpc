@@ -6,7 +6,7 @@
  * Time: 5:10 PM
  */
 
-namespace common\modules\jsonrpc\controllers;
+namespace voenniy\jsonrpc\controllers;
 
 
 use yii\web\Controller;
@@ -19,7 +19,7 @@ class FrontendController extends Controller
     {
         return array(
             'index' => array(
-                'class' => 'common\modules\jsonrpc\components\Action',
+                'class' => 'voenniy\jsonrpc\components\Action',
             ),
         );
     }

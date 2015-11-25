@@ -1,6 +1,6 @@
 <?php
-namespace common\modules\jsonrpc\components;
-use common\modules\jsonrpc\JsonRPCModule;
+namespace voenniy\jsonrpc\components;
+use voenniy\jsonrpc\JsonRPCModule;
 use Yii;
 use yii\helpers\VarDumper;
 use yii\web\HttpException;

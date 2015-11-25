@@ -1,6 +1,6 @@
 <?php
 
-namespace common\modules\jsonrpc\assets;
+namespace voenniy\jsonrpc\assets;
 
 use yii\web\AssetBundle;
 

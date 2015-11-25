@@ -1,7 +1,7 @@
 <?php
-namespace common\modules\jsonrpc\components\traits;
+namespace voenniy\jsonrpc\components\traits;
 
-use common\modules\jsonrpc\components\Exception;
+use voenniy\jsonrpc\components\Exception;
 
 trait Serializable
 {
