@@ -10,6 +10,7 @@ class JsonrpcAsset extends AssetBundle {
     public $js = [
         'rpc_callback.js',
         'jquery.jsonrpc.js',
+        'script.js'
     ];
     public $depends = [
         'yii\web\JqueryAsset',
