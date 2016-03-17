@@ -21,10 +21,14 @@ class Action extends \yii\base\Action
                 $command = Yii::$app->request->get('command');
                 preg_match("/([^\(]*)\((.*)\)/", $command, $parsed);
                 $method = @$parsed[1] ? $parsed[1] : $command;
-                $params = explode(",", @$parsed[2]);
 
                 $this->setMethod($method);
-                $this->setParams($params);
+                if($parsed[2] !== ''){
+                    $this->setParams(explode(",", @$parsed[2]));
+                } else {
+                    $this->setParams([]);
+                }
+
             } else {
                 $this->setRequestMessage(file_get_contents('php://input'));
             }
