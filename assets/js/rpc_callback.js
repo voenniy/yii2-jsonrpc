@@ -50,6 +50,9 @@ function rpc_callback(data, callback){
             }
         }
         if(typeof callback == 'function' && callbackData){
+            if(callbackData.length == 1){
+                callbackData = callbackData[0];
+            }
             callback(callbackData);
         }
         return true;
