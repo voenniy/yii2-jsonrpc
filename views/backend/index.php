@@ -7,10 +7,10 @@
 
 <h1>JsonRPC console</h1>
 
-<form method="post">
+<form method="post" id="rpc_form">
 <div class="row">
     <div class="col-lg-10">
-        <textarea class="form-control" rows="10" name="test" id="textarea" spellcheck="false"></textarea>
+        <textarea class="form-control" rows="10" name="test" id="rpc_textarea" spellcheck="false"></textarea>
     </div>
 </div>
 <div class="row">

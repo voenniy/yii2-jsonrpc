@@ -48,7 +48,7 @@ $(function(){
             this.method = decodeURIComponent(window.location.hash.substr(1));
 
             if(localStorage.inputJsonRPC != undefined){
-                $('#textarea').val(localStorage.inputJsonRPC);
+                $('#rpc_textarea').val(localStorage.inputJsonRPC);
             }
 
             this.workSpace();
@@ -59,7 +59,7 @@ $(function(){
             });
 
             var _this = this;
-            $("form").on("submit", function(){
+            $("#rpc_form").on("submit", function(){
                 _this.saveHistory();
                 _this.clear();
                 if(_this.parseMethod()){
@@ -79,7 +79,7 @@ $(function(){
 
         this.workSpace = function() {
             var  _this = this;
-            $('#textarea').on("click keyup", function(){
+            $('#rpc_textarea').on("click keyup", function(){
                 function caretPosition(el){
                     if(el.selectionStart){
                         return 1+el.selectionStart;
@@ -116,7 +116,7 @@ $(function(){
 
             }).on('keypress', function(e){
                 if(event.keyCode==10||(event.ctrlKey && event.keyCode==13)){
-                    $(this).parents('form:eq(0)').submit();
+                    $('#rpc_form').submit();
                 }
             });
         };
@@ -143,7 +143,7 @@ $(function(){
         };
 
         this.saveHistory = function(){
-            localStorage.inputJsonRPC = $('#textarea').val();
+            localStorage.inputJsonRPC = $('#rpc_textarea').val();
             return this;
         };
 
