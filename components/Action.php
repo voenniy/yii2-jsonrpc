@@ -35,7 +35,7 @@ class Action extends \yii\base\Action
             $this->result = $this->tryToRunMethod();
         } catch (\Exception $e) {
             Yii::error($e, 'service.error');
-            $this->exception = new Exception($e->getMessage(), Exception::INTERNAL_ERROR);
+            $this->exception = new Exception($e->getMessage(), $e->getCode());
         }
         Yii::endProfile('service.request');
         if($this->debug){
@@ -78,10 +78,10 @@ class Action extends \yii\base\Action
     }
 
     /**
-     * @param string|callable|\ReflectionMethod $method
-     * @param array $params
-     *
+     * @param $method
+     * @param $params
      * @return mixed
+     * @throws Exception
      */
     protected function runMethod($method, $params)
     {
@@ -89,7 +89,12 @@ class Action extends \yii\base\Action
             // именнованные ключи
             $params = $this->namedParams($method, $params);
         }
-        return $method->invokeArgs($this->getObject(), $params);
+        try {
+            return $method->invokeArgs($this->getObject(), $params);
+        } catch (\Exception $e) {
+            throw new Exception($e->getMessage(), Exception::INVALID_PARAMS);
+        }
+
     }
 
     /**
