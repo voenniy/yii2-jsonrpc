@@ -37,7 +37,7 @@ class Base
         } else {
             if(strpos($method, '.') !== false) {
                 list($object, $method) = explode(".", $method);
-                $info = $this->classinfo_parse_file(\Yii::getAlias('@frontend/APIv1/') . $object .".php");
+                $info = $this->classinfo_parse_file(JsonRPCModule::getInstance()->apiPath . $object .".php");
             } else {
                 $info = $this->classinfo_parse_file(__FILE__);
             }
