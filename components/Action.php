@@ -2,6 +2,7 @@
 namespace voenniy\jsonrpc\components;
 use voenniy\jsonrpc\JsonRPCModule;
 use Yii;
+use yii\base\ErrorException;
 use yii\helpers\VarDumper;
 use yii\web\HttpException;
 
@@ -33,9 +34,12 @@ class Action extends \yii\base\Action
                 $this->setRequestMessage(file_get_contents('php://input'));
             }
             $this->result = $this->tryToRunMethod();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Yii::error($e, 'service.error');
             $this->exception = new Exception($e->getMessage(), $e->getCode());
+        } catch (\Exception $e) {
+            Yii::error($e, 'service.error');
+            $this->exception = new Exception($e->getMessage(), Exception::INTERNAL_ERROR);
         }
         Yii::endProfile('service.request');
         if($this->debug){
@@ -78,7 +82,7 @@ class Action extends \yii\base\Action
     }
 
     /**
-     * @param $method
+     * @param \ReflectionMethod $method
      * @param $params
      * @return mixed
      * @throws Exception
@@ -91,8 +95,8 @@ class Action extends \yii\base\Action
         }
         try {
             return $method->invokeArgs($this->getObject(), $params);
-        } catch (\Exception $e) {
-            throw new Exception($e->getMessage(), Exception::INVALID_PARAMS);
+        } catch (ErrorException $e) {
+            throw new Exception($e->getMessage() . ' ' . get_class($e), Exception::INVALID_PARAMS);
         }
 
     }
