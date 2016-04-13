@@ -4,6 +4,7 @@ use voenniy\jsonrpc\JsonRPCModule;
 use Yii;
 use yii\base\ErrorException;
 use yii\helpers\VarDumper;
+use yii\web\BadRequestHttpException;
 use yii\web\HttpException;
 
 class Action extends \yii\base\Action
@@ -96,7 +97,7 @@ class Action extends \yii\base\Action
         try {
             return $method->invokeArgs($this->getObject(), $params);
         } catch (ErrorException $e) {
-            throw new Exception($e->getMessage() . ' ' . get_class($e), Exception::INVALID_PARAMS);
+            throw new Exception($e->getMessage() . ' ' . get_class($e) . '[method=> ' . $method->getName() . ',  params=> ' . json_encode($params) . ']', Exception::INVALID_PARAMS);
         }
 
     }
@@ -152,10 +153,19 @@ class Action extends \yii\base\Action
 
     protected function failIfNotAJsonRpcRequest()
     {
-        if (!((Yii::$app->request->isPost || Yii::$app->request->isOptions) && $this->checkContentType()) && !$this->debug) {
-            throw new HttpException(404, "Page not found!");
+        if(!$this->isJsonRpcRequest() && !$this->debug){
+            throw new BadRequestHttpException("Invalid JSON-RPC data in request. The request must POST or OPTION and CONTENT_TYPE=application/json-rpc");
         }
     }
+
+    public static function isJsonRpcRequest()
+    {
+        if((Yii::$app->request->isPost || Yii::$app->request->isOptions) && (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json-rpc') !== false)){
+            return true;
+        }
+        return false;
+    }
+
 
 
 }

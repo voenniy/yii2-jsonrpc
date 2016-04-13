@@ -63,9 +63,5 @@ trait Serializable
 
         return $version && $method && $data && $additional;
     }
-
-    public static function checkContentType()
-    {
-        return empty($_SERVER['CONTENT_TYPE']) || $_SERVER['CONTENT_TYPE'] != 'application/json-rpc';
-    }
+    
 }
