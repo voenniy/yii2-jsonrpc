@@ -154,7 +154,7 @@ class Action extends \yii\base\Action
     protected function failIfNotAJsonRpcRequest()
     {
         if(!$this->isJsonRpcRequest() && !$this->debug){
-            throw new BadRequestHttpException("Invalid JSON-RPC data in request. The request must POST or OPTION and CONTENT_TYPE=application/json-rpc");
+            throw new BadRequestHttpException("Invalid JSON-RPC data in request. The request must be POST or OPTION and CONTENT_TYPE=application/json-rpc");
         }
     }
 
