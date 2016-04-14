@@ -32,7 +32,7 @@ class Action extends \yii\base\Action
                 }
 
             } else {
-                $this->setRequestMessage(file_get_contents('php://input'));
+                $this->setRequestMessage(Yii::$app->request->rawBody);
             }
             $this->result = $this->tryToRunMethod();
         } catch (Exception $e) {
@@ -154,13 +154,13 @@ class Action extends \yii\base\Action
     protected function failIfNotAJsonRpcRequest()
     {
         if(!$this->isJsonRpcRequest() && !$this->debug){
-            throw new BadRequestHttpException("Invalid JSON-RPC data in request. The request must be POST or OPTION and CONTENT_TYPE=application/json-rpc");
+            throw new BadRequestHttpException("Invalid JSON-RPC data in request. The request must POST or OPTION and Content-Type=application/json");
         }
     }
 
     public static function isJsonRpcRequest()
     {
-        if((Yii::$app->request->isPost || Yii::$app->request->isOptions) && (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json-rpc') !== false)){
+        if((Yii::$app->request->isPost || Yii::$app->request->isOptions) && (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false)){
             return true;
         }
         return false;
