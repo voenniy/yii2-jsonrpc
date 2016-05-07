@@ -10,12 +10,14 @@
         options = options||{};
         var ajaxOptions = {
             url : '/v1',
-            contentType: 'application/json-rpc; charset=utf-8',
+            contentType: 'application/json; charset=utf-8',
             dataType:  'json',
             type    : 'POST',
             success : options.success||function(m){
-                var data = m.result;
-                rpc_callback(data, callback);
+                if(m.result){
+                    var data = m.result;
+                    rpc_callback(data, callback);
+                }
                 return m;
             }
         };

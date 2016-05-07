@@ -1,5 +1,6 @@
 <?php
 namespace voenniy\jsonrpc\components;
+use voenniy\jsonrpc\components\traits\Request;
 use voenniy\jsonrpc\JsonRPCModule;
 use Yii;
 use yii\base\ErrorException;
@@ -9,9 +10,9 @@ use yii\web\HttpException;
 
 class Action extends \yii\base\Action
 {
-    use traits\Serializable;
-
+    use Request;
     public $debug = false;
+    public $result = false;
 
     public function run()
     {
@@ -34,33 +35,38 @@ class Action extends \yii\base\Action
             } else {
                 $this->setRequestMessage(Yii::$app->request->rawBody);
             }
-            $this->result = $this->tryToRunMethod();
-        } catch (Exception $e) {
+            $this->result['result'] = $this->tryToRunMethod();
+        } 
+        catch (\Exception $e) {
             Yii::error($e, 'service.error');
-            $this->exception = new Exception($e->getMessage(), $e->getCode());
-        } catch (\Exception $e) {
-            Yii::error($e, 'service.error');
-            $this->exception = new Exception($e->getMessage(), Exception::INTERNAL_ERROR);
+            $this->result = JsonRpcException::convertExceptionToArray($e);
+            if(!isset($this->result['type'])){
+                $this->result['type'] = 'Exception';
+            }
         }
         Yii::endProfile('service.request');
         if($this->debug){
-            $output = isset($this->toArray()['error']) ? $this->toArray()['error'] : $this->toArray()['result'];
-            return VarDumper::dumpAsString($output, 10, true);
+            return VarDumper::dumpAsString($this->result, 10, true);
         } else {
-            return $this->toJson();
+            return $this->result;
         }
 
 
     }
     /**
      * @return mixed
-     * @throws Exception
+     * @throws JsonRpcException
      */
     protected function getHandler()
     {
         if(strpos($this->getMethod(), '.') !== false){
             list($object, $method) = explode(".", $this->getMethod());
-            $object = Yii::createObject(JsonRPCModule::getInstance()->apiNamespace . '\\' . $object);
+            try {
+                $object = Yii::createObject(JsonRPCModule::getInstance()->apiNamespace . '\\' . $object);
+            } catch (\Exception $e){
+                throw new JsonRpcException($e->getMessage(), JsonRpcException::METHOD_NOT_FOUND, $e);
+            }
+
         } else {
             $object = 'Base';
             $method = $this->getMethod();
@@ -75,7 +81,7 @@ class Action extends \yii\base\Action
         $this->setObject($object);
         $class = new \ReflectionClass($this->getObject());
         if (!$class->hasMethod($this->getMethod())) {
-            throw new Exception("Method not found " . $this->getMethod(), Exception::METHOD_NOT_FOUND);
+            throw new JsonRpcException("Method not found " . $this->getMethod(), JsonRpcException::METHOD_NOT_FOUND);
         }
         $method = $class->getMethod($this->getMethod());
 
@@ -86,7 +92,7 @@ class Action extends \yii\base\Action
      * @param \ReflectionMethod $method
      * @param $params
      * @return mixed
-     * @throws Exception
+     * @throws JsonRpcException
      */
     protected function runMethod($method, $params)
     {
@@ -97,7 +103,7 @@ class Action extends \yii\base\Action
         try {
             return $method->invokeArgs($this->getObject(), $params);
         } catch (ErrorException $e) {
-            throw new Exception($e->getMessage() . ' ' . get_class($e) . '[method=> ' . $method->getName() . ',  params=> ' . json_encode($params) . ']', Exception::INVALID_PARAMS);
+            throw new JsonRpcException($e->getMessage() . ' ' . get_class($e) . '[method=> ' . $method->getName() . ',  params=> ' . json_encode($params) . ']', JsonRpcException::INVALID_PARAMS);
         }
 
     }
@@ -107,7 +113,7 @@ class Action extends \yii\base\Action
      * @param $method
      * @param array $arguments
      * @return array
-     * @throws Exception
+     * @throws JsonRpcException
      */
     protected function namedParams($method, array $arguments = array())
     {
@@ -120,7 +126,7 @@ class Action extends \yii\base\Action
             $names[] = $name;
             $isArgumentGiven = array_key_exists($name, $arguments);
             if (!$isArgumentGiven && !$param->isDefaultValueAvailable()) {
-                throw new Exception("Missing required argument #" . ($param->getPosition()+1) . ", " . $name, Exception::INVALID_PARAMS);
+                throw new JsonRpcException("Missing required argument #" . ($param->getPosition()+1) . ", " . $name, JsonRpcException::INVALID_PARAMS);
             }
 
             $values[$param->getPosition()] =
@@ -131,7 +137,7 @@ class Action extends \yii\base\Action
         // Если передано имя аргумента, которого нет в методе
         foreach ($arguments as $aName=>$v) {
             if(array_search($aName, $names) === false){
-                throw new Exception("Argument " . $aName . " not exists in method", Exception::INVALID_PARAMS);
+                throw new JsonRpcException("Argument " . $aName . " not exists in method", JsonRpcException::INVALID_PARAMS);
             }
         }
 

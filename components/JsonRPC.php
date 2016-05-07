@@ -9,6 +9,8 @@
 namespace voenniy\jsonrpc\components;
 
 
+use yii\helpers\Json;
+
 class JsonRPC  {
     protected $method = [];
 
@@ -47,7 +49,7 @@ class JsonRPC  {
                 'id' => uniqid()
             ];
         }
-        return $asString ? json_encode($request) : $request;
+        return $asString ? Json::encode($request) : $request;
     }
 
     public function __toString(){
