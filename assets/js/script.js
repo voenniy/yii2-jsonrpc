@@ -43,6 +43,7 @@ $(function(){
     function RpcConsole(){
         this.method= '';
         this.params = [];
+        this.jsonObject = false;
         this.run = function(){
 
             this.method = decodeURIComponent(window.location.hash.substr(1));
@@ -124,7 +125,17 @@ $(function(){
         this.parseMethod = function(method){
             method = method || this.method;
             if(!method) return false;
-            window.location.hash = encodeURIComponent(method);
+            try {
+                this.jsonObject = JSON.parse(method);
+                this.command = this.jsonObject.method || '';
+                this.params = this.jsonObject.params || '';
+                window.location.hash = encodeURIComponent(JSON.stringify(this.jsonObject));
+                return this;
+            } catch (e){
+                this.jsonObject = false;
+                window.location.hash = encodeURIComponent(method);
+            }
+
             var params = method.match(/\((.*)\)/);
             if(params && params[1]){
                 params = params[1].split(",");
@@ -157,6 +168,12 @@ $(function(){
                 return false;
             }
             dateStart = (new Date()).getTime();
+            var cmd = '';
+            if(this.jsonObject){
+                cmd = JSON.stringify(this.jsonObject);
+            } else {
+                cmd = this.command+"("+this.params.join(",") + ")";
+            }
             var intervalId  = setInterval('$("#timeResult").text(((new Date()).getTime() - dateStart)/1000 + "s")', 100);
             var _this = this;
             $rpcInfo = $("<a href='#' title='Справка' style='margin-left: 5px'></a>").addClass("glyphicon glyphicon-question-sign").data('rpcinfo', this.command).click(function(){
@@ -166,7 +183,8 @@ $(function(){
                 _this.send();
                 return false;
             });
-            $rpcInTab = $("<a  style='margin-left: 5px' href='/jsonrpc/view?command="+this.command+"("+this.params.join(",")+")' target='_blank' title='Открыть в новом окне'></a>").addClass("glyphicon glyphicon-new-window");
+
+            $rpcInTab = $("<a  style='margin-left: 5px' href='/jsonrpc/view?command=" + cmd + "' target='_blank' title='Открыть в новом окне'></a>").addClass("glyphicon glyphicon-new-window");
 
 
             $rpcReload = $("<a href='#'title='Обновить' style='margin-left: 5px'></a>").addClass("glyphicon glyphicon-transfer").click(function(){
@@ -174,7 +192,7 @@ $(function(){
                 _this.send();
                 return false;
             });
-            $('#rpc_method').html(this.command + '(' + this.params.join(',') + ')').append($rpcInfo).append($rpcReload).append($rpcInTab);
+            $('#rpc_method').html(cmd).append($rpcInfo).append($rpcReload).append($rpcInTab);
             $.jsonRpc(this.command, this.params, function(m){
                 $("#rpc_result").html(print_r(m));
             }, {

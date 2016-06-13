@@ -4,6 +4,8 @@ use voenniy\jsonrpc\components\traits\Request;
 use voenniy\jsonrpc\JsonRPCModule;
 use Yii;
 use yii\base\ErrorException;
+use yii\base\Exception;
+use yii\helpers\Json;
 use yii\helpers\VarDumper;
 use yii\web\BadRequestHttpException;
 use yii\web\HttpException;
@@ -22,16 +24,28 @@ class Action extends \yii\base\Action
         try {
             if($this->debug){
                 $command = Yii::$app->request->get('command');
-                preg_match("/([^\(]*)\((.*)\)/", $command, $parsed);
-                $method = @$parsed[1] ? $parsed[1] : $command;
+                try {
+                    $r = Json::decode($command);
+                    if(!isset($r['method'])){
+                        throw new \voenniy\jsonrpc\components\Exception('Method not found', \voenniy\jsonrpc\components\Exception::METHOD_NOT_FOUND);
+                    }
+                    $this->setMethod($r['method']);
+                    if(!isset($r['params'])){
+                        $this->setParams([]);
+                    } else {
+                        $this->setParams($r['params']);
+                    }
+                } catch (\Exception $e){
+                    preg_match("/([^\(]*)\((.*)\)/", $command, $parsed);
+                    $method = @$parsed[1] ? $parsed[1] : $command;
 
-                $this->setMethod($method);
-                if($parsed[2] !== ''){
-                    $this->setParams(explode(",", @$parsed[2]));
-                } else {
-                    $this->setParams([]);
+                    $this->setMethod($method);
+                    if($parsed[2] !== ''){
+                        $this->setParams(explode(",", @$parsed[2]));
+                    } else {
+                        $this->setParams([]);
+                    }
                 }
-
             } else {
                 $this->setRequestMessage(Yii::$app->request->rawBody);
             }
@@ -166,7 +180,7 @@ class Action extends \yii\base\Action
 
     public static function isJsonRpcRequest()
     {
-        if((Yii::$app->request->isPost || Yii::$app->request->isOptions) && (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false)){
+        if(Yii::$app->request->isPost || Yii::$app->request->isOptions){
             return true;
         }
         return false;
