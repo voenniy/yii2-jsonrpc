@@ -42,7 +42,7 @@ class JsonRpcException extends \yii\base\Exception
         }
 
         $array = [
-            'name' => ($exception instanceof \Exception || $exception instanceof ErrorException) ? $exception->getName() : 'Exception',
+            'name' => get_class($exception),
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
         ];
