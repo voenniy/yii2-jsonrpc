@@ -13,6 +13,7 @@ class JsonrpcAsset extends AssetBundle {
         'script.js'
     ];
     public $depends = [
+        'voenniy\jsonrpc\assets\JqueryAutocompleteAsset',
         'yii\web\JqueryAsset',
     ];
 } 

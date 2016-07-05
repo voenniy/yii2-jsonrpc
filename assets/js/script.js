@@ -40,6 +40,21 @@ function print_r( array, return_val ) {
 }
 
 $(function(){
+    $('textarea').textcomplete([{
+        match: /(^|\b)([a-zA-Z].*)?$/,
+        search: function (term, callback) {
+            $.jsonRpc('man', '', function (m) {
+                callback($.map(m, function (word) {
+                    return word.indexOf(term) === 0 ? word : null;
+                }));
+            })
+            var words = ['google', 'facebook', 'github', 'microsoft', 'yahoo'];
+
+        },
+        replace: function (word) {
+            return word;
+        }
+    }]);
     function RpcConsole(){
         this.method= '';
         this.params = [];
