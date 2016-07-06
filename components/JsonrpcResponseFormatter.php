@@ -31,7 +31,7 @@ class JsonrpcResponseFormatter extends Component implements ResponseFormatterInt
             $response->data = (new JsonRpcException(serialize($response->data), JsonRpcException::INTERNAL_ERROR))->getErrorAsArray();
         }
         // Exception
-        if(is_null($response->data['result']) || isset($response->data['result'])) {
+        if(array_key_exists('result', $response->data)) {
             $answer['result'] = $response->data['result'];
         } else {
             $answer['error'] = [
