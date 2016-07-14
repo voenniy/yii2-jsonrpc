@@ -110,7 +110,7 @@ class Action extends \yii\base\Action
      */
     protected function runMethod($method, $params)
     {
-        if(is_string(key($params))){
+        if(is_array($params) && is_string(key($params))){
             // именнованные ключи
             $params = $this->namedParams($method, $params);
         }

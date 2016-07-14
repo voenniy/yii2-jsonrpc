@@ -8,13 +8,13 @@ use yii\helpers\ArrayHelper;
 class JsonRPCModule extends \yii\base\Module
 {
     public  $apiNamespace = 'frontend\APIv1';
+    public $responseFormatter = ['jsonrpc' => 'voenniy\jsonrpc\components\JsonrpcResponseFormatter'];
 
     public function init()
     {
         parent::init();
 
-        \Yii::$app->response->formatters =  ArrayHelper::merge(\Yii::$app->response->formatters, ['jsonrpc' => 'voenniy\jsonrpc\components\JsonrpcResponseFormatter']);
-
+        \Yii::$app->response->formatters =  ArrayHelper::merge(\Yii::$app->response->formatters, $this->responseFormatter);
         \Yii::setAlias('@jsonrpc', __DIR__);
 
         $view = \Yii::$app->getView();
