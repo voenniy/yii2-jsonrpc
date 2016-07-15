@@ -37,7 +37,10 @@ class JsonRpcException extends \yii\base\Exception
 
     public static function convertExceptionToArray($exception)
     {
-        if (!YII_DEBUG && !$exception instanceof UserException && !$exception instanceof HttpException) {
+        if(isset($exception->exception) && $exception->exception !== null){
+            $exception = $exception->exception;
+        } 
+        if (!YII_DEBUG && !($exception instanceof UserException) && !($exception instanceof HttpException)) {
             $exception = new HttpException(500, \Yii::t('yii', 'An internal server error occurred.'));
         }
 
