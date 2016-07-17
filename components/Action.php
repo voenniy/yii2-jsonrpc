@@ -117,7 +117,7 @@ class Action extends \yii\base\Action
         try {
             return $method->invokeArgs($this->getObject(), $params);
         } catch (ErrorException $e) {
-            throw new JsonRpcException($e->getMessage() . ' ' . get_class($e) . '[method=> ' . $method->getName() . ',  params=> ' . json_encode($params) . ']', JsonRpcException::INVALID_PARAMS, $e);
+            throw new JsonRpcException($e->getMessage(), JsonRpcException::INVALID_PARAMS, $e, $method);
         }
 
     }

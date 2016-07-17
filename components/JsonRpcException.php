@@ -15,11 +15,12 @@ class JsonRpcException extends \yii\base\Exception
     const INTERNAL_ERROR = -32603;
     const UNAUTHORIZED   = -32001;
 
-    private $exception = null;
+    protected $exception = null, $method;
 
-    public function __construct($message, $code, $exception = null)
+    public function __construct($message, $code, $exception = null, $method=null)
     {
         $this->exception = $exception;
+        $this->method = $method;
         parent::__construct($message, $code);
     }
 
@@ -37,17 +38,28 @@ class JsonRpcException extends \yii\base\Exception
 
     public static function convertExceptionToArray($exception)
     {
+        $code = $exception->getCode();
+        $message = $exception->getMessage();
+        $rpc = null;
+        if(isset($exception->method) && $exception->method !== null){
+            $rpc = [
+                'class' => $exception->method->class,
+                'method' => $exception->method->name,
+            ];
+        }
+
         if(isset($exception->exception) && $exception->exception !== null){
             $exception = $exception->exception;
+
         } 
         if (!YII_DEBUG && !($exception instanceof UserException) && !($exception instanceof HttpException)) {
             $exception = new HttpException(500, \Yii::t('yii', 'An internal server error occurred.'));
         }
 
         $array = [
-            'name' => get_class($exception),
-            'message' => $exception->getMessage(),
-            'code' => $exception->getCode(),
+            //'name' => get_class($exception),
+            'message' => $message,
+            'code' => $code,
         ];
         if ($exception instanceof HttpException) {
             $array['status'] = $exception->statusCode;
@@ -61,6 +73,9 @@ class JsonRpcException extends \yii\base\Exception
                 if ($exception instanceof \yii\db\Exception) {
                     $array['error-info'] = $exception->errorInfo;
                 }
+            }
+            if($rpc !== null){
+                $array['rpc'] = $rpc;
             }
         }
         if (($prev = $exception->getPrevious()) !== null) {
