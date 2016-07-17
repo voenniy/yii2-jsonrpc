@@ -26,7 +26,7 @@ class BackendController extends Controller{
         );
     }
 
-    public function actionView2($command){
+    /*public function actionView2($command){
         preg_match("/([^.]*\.)?([^\(]*)\((.*)\)/", $command, $parsed);
         $object = str_replace(".", "", $parsed[1]);
 
@@ -45,7 +45,7 @@ class BackendController extends Controller{
 
 
         return $this->render('view', ['output'=>$output]);
-    }
+    }*/
 
     public function behaviors()
     {

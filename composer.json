@@ -5,7 +5,7 @@
     "require": {
         "php": ">=5.4.0",
         "yiisoft/yii2": "~2",
-        "bower-asset/jquery-textcomplete" : "*"
+        "bower-asset/jquery-textcomplete" : "1.6.1"
     },
     "homepage": "https://github.com/voenniy/yii2-jsonrpc",
     "support": {

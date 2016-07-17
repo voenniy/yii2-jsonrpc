@@ -1,5 +1,4 @@
 <?php
-
 namespace voenniy\jsonrpc;
 
 use voenniy\jsonrpc\assets\JsonrpcAsset;
@@ -7,7 +6,7 @@ use yii\helpers\ArrayHelper;
 
 class JsonRPCModule extends \yii\base\Module
 {
-    public  $apiNamespace = 'frontend\APIv1';
+    public $apiNamespace = 'frontend\APIv1';
     public $responseFormatter = ['jsonrpc' => 'voenniy\jsonrpc\components\JsonrpcResponseFormatter'];
 
     public function init()

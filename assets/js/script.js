@@ -220,7 +220,12 @@ $(function(){
                     $("#rpc_all").html(print_r(m['responseText']));
                     if(m.responseJSON.error){
                         $('.rpc_error').show();
-                        $('#rpc_error').html('<b>' + m.responseJSON.error.message + '</b>');
+                        if(m.responseJSON.error.data){
+                            $('#rpc_error').html('<b>' + m.responseJSON.error.message + print_r(m.responseJSON.error.data) + '</b>');
+                        } else {
+                            $('#rpc_error').html('<b>' + m.responseJSON.error.message + '</b>');
+                        }
+
                     }
                 }
             })
