@@ -13,7 +13,7 @@ use yii\web\AssetBundle;
 
 class JqueryAutocompleteAsset extends AssetBundle
 {
-    public $sourcePath = '@bower/jquery-textcomplete/dist';
+    public $sourcePath = '@npm/jquery-textcomplete/dist';
 
     public $js = [
         'jquery.textcomplete.min.js'
