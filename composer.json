@@ -4,8 +4,7 @@
     "type": "yii2-extension",
     "require": {
         "php": ">=5.4.0",
-        "yiisoft/yii2": "~2",
-        "npm-asset/jquery-textcomplete" : "1.6.1"
+        "yiisoft/yii2": "~2"
     },
     "homepage": "https://github.com/voenniy/yii2-jsonrpc",
     "support": {
