@@ -40,21 +40,48 @@ function print_r( array, return_val ) {
 }
 
 $(function(){
-    $('textarea').textcomplete([{
-        match: /(^|\b)([a-zA-Z].*)?$/,
-        search: function (term, callback) {
-            $.jsonRpc('man', '', function (m) {
-                callback($.map(m, function (word) {
-                    return word.indexOf(term) === 0 ? word : null;
-                }));
-            })
-            var words = ['google', 'facebook', 'github', 'microsoft', 'yahoo'];
+    $('textarea').textcomplete([
+        {
+            match: /(^|\b)([a-zA-Z].*)?$/,
+            search: function (term, callback) {
+                $.jsonRpc('man', '', function (m) {
+                    callback($.map(m, function (word) {
+                        return word.indexOf(term) === 0 ? word : null;
+                    }));
+                })
+            },
+            replace: function (word) {
+                return word;
+            }
 
-        },
-        replace: function (word) {
-            return word;
-        }
-    }]);
+        },{
+            match: /(^|\s)({)$/,
+            search: function (term, callback) {
+                    console.log(term);
+                    var rpc = {method:"", params:[], id:1};
+                    callback([JSON.stringify(rpc)]);
+            },
+            replace: function () {
+                return ['$1{"method":"', '", "params":[], "id":1}'];
+            }
+        }/*,{
+            match: /(^|\s)({\s*['"]method['"]\s*:\s*['"].*)$/,
+            search: function (term, callback) {
+                var re = /^.*method.*['"]/;
+                console.log(term);
+                term = term.replace(re, '');
+                $.jsonRpc('man', '', function (m) {
+                    callback($.map(m, function (word) {
+                        return word.indexOf(term) === 0 ? word : null;
+                    }));
+                })
+            },
+            replace: function (word) {
+                var func = word.replace(/\(.*$/,'');
+                var params = word.replace(/^.*\(/,'').replace(')','');
+                return ['\n{"method":"'+func, '", "params":['+params+'], "id":1}'];
+            }
+        }*/]);
     function RpcConsole(){
         this.method= '';
         this.params = [];
