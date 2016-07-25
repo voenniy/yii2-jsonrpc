@@ -42,8 +42,35 @@ function print_r( array, return_val ) {
 $(function(){
     $('textarea').textcomplete([
         {
+            match: /(^|\s)({['"])$/,
+            search: function (term, callback) {
+                var rpc = {method : "", params : [], id:1};
+                callback([JSON.stringify(rpc)]);
+            },
+            replace: function (word) {
+                var func = word.replace(/\(.*$/,'');
+                var params = word.replace(/^.*\(/,'').replace(')','');
+                return ['$1{"method":"', '", "params":[], "id":1}'];
+            }
+        },{
+            match: /(^|\s)({.+)$/,
+            search: function (term, callback) {
+                term  = term.replace("{", "");
+                $.jsonRpc('man', '', function (m) {
+                    callback($.map(m, function (word) {
+                        return word.indexOf(term) === 0 ? word : null;
+                    }));
+                })
+            },
+            replace: function (word) {
+                var func = word.replace(/\(.*$/,'');
+                var params = word.replace(/^.*\(/,'').replace(')','');
+                return ['$1{"method":"'+func, '", "params":['+params+'], "id":1}'];
+            }
+        },{
             match: /(^|\b)([a-zA-Z].*)?$/,
             search: function (term, callback) {
+                console.log(term);
                 $.jsonRpc('man', '', function (m) {
                     callback($.map(m, function (word) {
                         return word.indexOf(term) === 0 ? word : null;
@@ -54,34 +81,7 @@ $(function(){
                 return word;
             }
 
-        },{
-            match: /(^|\s)({)$/,
-            search: function (term, callback) {
-                    console.log(term);
-                    var rpc = {method:"", params:[], id:1};
-                    callback([JSON.stringify(rpc)]);
-            },
-            replace: function () {
-                return ['$1{"method":"', '", "params":[], "id":1}'];
-            }
-        }/*,{
-            match: /(^|\s)({\s*['"]method['"]\s*:\s*['"].*)$/,
-            search: function (term, callback) {
-                var re = /^.*method.*['"]/;
-                console.log(term);
-                term = term.replace(re, '');
-                $.jsonRpc('man', '', function (m) {
-                    callback($.map(m, function (word) {
-                        return word.indexOf(term) === 0 ? word : null;
-                    }));
-                })
-            },
-            replace: function (word) {
-                var func = word.replace(/\(.*$/,'');
-                var params = word.replace(/^.*\(/,'').replace(')','');
-                return ['\n{"method":"'+func, '", "params":['+params+'], "id":1}'];
-            }
-        }*/]);
+        }]);
     function RpcConsole(){
         this.method= '';
         this.params = [];
