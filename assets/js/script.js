@@ -118,6 +118,36 @@ $(function(){
                 _this.send();
                 return false;
             })
+
+            $('.rpc_format').on('click', function(){
+                var val = $('textarea').val();
+                // Разбиваем по строкам
+                var lines = val.replace('\r','').split('\n');
+                lines = lines.sort();
+                var prev = '';
+                var out = [];
+                for(i in lines){
+                    if(prev == '') {
+                        prev = lines[i];
+                        continue;
+                    }
+                    var current = lines[i].trim();
+                    var part = current.match(/[a-z]+/i);
+                    if(part && part.length > 0){
+                        part = part[0];
+                        console.log(part, prev, prev.indexOf(part));
+                        if(prev.indexOf(part) === -1){
+                            out.push('');
+                        }
+                    }
+
+                    out.push(current);
+                    prev = current;
+                }
+
+                $('textarea').val(out.join('\n'));
+
+            });
         };
 
         this.workSpace = function() {

@@ -14,9 +14,12 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-10">
+    <div class="col-lg-8">
         <a href="#" class="rpc_help">Справка</a>
         <input type="submit" class="btn btn-info btn-flat" value="Go" />
+    </div>
+    <div class="col-lg-1">
+        <a href="#" class="rpc_format">Форматировать</a>
     </div>
 </div>
 
