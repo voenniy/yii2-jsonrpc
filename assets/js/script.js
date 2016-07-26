@@ -48,8 +48,6 @@ $(function(){
                 callback([JSON.stringify(rpc)]);
             },
             replace: function (word) {
-                var func = word.replace(/\(.*$/,'');
-                var params = word.replace(/^.*\(/,'').replace(')','');
                 return ['$1{"method":"', '", "params":[], "id":1}'];
             }
         },{
@@ -70,7 +68,7 @@ $(function(){
         },{
             match: /(^|\b)([a-zA-Z].*)?$/,
             search: function (term, callback) {
-                console.log(term);
+                //console.log(term);
                 $.jsonRpc('man', '', function (m) {
                     callback($.map(m, function (word) {
                         return word.indexOf(term) === 0 ? word : null;
@@ -135,7 +133,7 @@ $(function(){
                     var part = current.match(/[a-z]+/i);
                     if(part && part.length > 0){
                         part = part[0];
-                        console.log(part, prev, prev.indexOf(part));
+                        //console.log(part, prev, prev.indexOf(part));
                         if(prev.indexOf(part) === -1){
                             out.push('');
                         }
