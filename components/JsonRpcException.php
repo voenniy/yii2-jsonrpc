@@ -66,10 +66,14 @@ class JsonRpcException extends \yii\base\Exception
         }
 
         $array = [
-            'name' => $exception->getName(),
             'message' => $exception->getMessage(),
             'code' => $exception->getCode(),
         ];
+
+        if(method_exists($exception, 'getName')){
+            $array['name'] = $exception->getName();
+        }
+
         if ($exception instanceof HttpException) {
             $array['status'] = $exception->statusCode;
         }
