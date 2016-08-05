@@ -125,16 +125,17 @@ $(function(){
                 var prev = '';
                 var out = [];
                 for(i in lines){
-                    if(prev == '') {
-                        prev = lines[i];
+                    var current = lines[i].trim();
+                    if(current == '') {
                         continue;
                     }
-                    var current = lines[i].trim();
+                    console.log(current, prev);
+
                     var part = current.match(/[a-z]+/i);
                     if(part && part.length > 0){
                         part = part[0];
                         //console.log(part, prev, prev.indexOf(part));
-                        if(prev.indexOf(part) === -1){
+                        if(prev != '' && prev.indexOf(part) === -1){
                             out.push('');
                         }
                     }
