@@ -173,7 +173,7 @@ class Action extends \yii\base\Action
 
     public static function isJsonRpcRequest()
     {
-        if (Yii::$app->request->isPost || Yii::$app->request->isOptions) {
+        if (Yii::$app->request->isPost) {
             return true;
         }
         return false;

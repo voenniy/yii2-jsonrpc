@@ -129,7 +129,7 @@ $(function(){
                     if(current == '') {
                         continue;
                     }
-                    console.log(current, prev);
+                    //console.log(current, prev);
 
                     var part = current.match(/[a-z]+/i);
                     if(part && part.length > 0){
