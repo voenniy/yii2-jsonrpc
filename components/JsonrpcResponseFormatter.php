@@ -40,8 +40,7 @@ class JsonrpcResponseFormatter extends Component implements ResponseFormatterInt
             ];
             if(isset($response->data['type']) && strpos($response->data['type'], 'UnauthorizedHttpException') !== false){
                $answer['error']['code'] = JsonRpcException::UNAUTHORIZED;
-            }
-            elseif(strpos($response->data['type'], 'JsonRpcException') !== false){
+            } elseif(isset($response->data['type']) && strpos($response->data['type'], 'JsonRpcException') !== false){
                $answer['error']['code'] = $response->data['code'];
             }
 
