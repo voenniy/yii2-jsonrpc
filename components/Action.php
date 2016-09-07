@@ -17,6 +17,9 @@ class Action extends \yii\base\Action
 
     public function run()
     {
+        if(Yii::$app->request->isOptions){
+            return '';
+        }
         $this->failIfNotAJsonRpcRequest();
         Yii::beginProfile('service.request');
         $output = null;
