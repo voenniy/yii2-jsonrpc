@@ -115,6 +115,7 @@ class Action extends \yii\base\Action
         try {
             return $method->invokeArgs($this->getObject(), $params);
         } catch (ErrorException $e) {
+            Yii::error($e, 'service.error');
             throw new JsonRpcException($e->getMessage(), JsonRpcException::INVALID_PARAMS, $e, $method);
         }
     }
