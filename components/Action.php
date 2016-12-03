@@ -74,6 +74,7 @@ class Action extends \yii\base\Action
     {
         if (strpos($this->getMethod(), '.') !== false) {
             list($object, $method) = explode(".", $this->getMethod());
+            $pinba_filename = $object . "_" . $method . ".php";
             try {
                 $object = Yii::createObject(JsonRPCModule::getInstance()->apiNamespace . '\\' . $object);
             } catch (\Exception $e) {
@@ -87,7 +88,11 @@ class Action extends \yii\base\Action
             if (($pos = strrpos($class, '\\')) !== false) {
                 $namespace = substr($class, 0, $pos) . '\\';
             }
+            $pinba_filename = $object . "_" . $method . ".php";
             $object = Yii::createObject($namespace . $object);
+        }
+        if(function_exists('pinba_script_name_set')){
+            pinba_script_name_set($pinba_filename);
         }
         $this->setMethod($method);
         $this->setObject($object);

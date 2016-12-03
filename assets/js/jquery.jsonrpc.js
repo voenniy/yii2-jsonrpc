@@ -9,7 +9,7 @@
         callback = callback || null;
         options = options||{};
         var ajaxOptions = {
-            url : '/v1',
+            url : API_URL || "",
             contentType: 'application/json; charset=utf-8',
             dataType:  'json',
             type    : 'POST',

@@ -8,6 +8,7 @@ class JsonRPCModule extends \yii\base\Module
 {
     public $apiNamespace = 'frontend\APIv1';
     public $responseFormatter = ['jsonrpc' => 'voenniy\jsonrpc\components\JsonrpcResponseFormatter'];
+    public $api_url = '/v1';
 
     public function init()
     {

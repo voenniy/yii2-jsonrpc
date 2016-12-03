@@ -9,10 +9,12 @@
 namespace voenniy\jsonrpc\controllers;
 
 use yii\web\Controller;
+use yii\web\View;
 
 class BackendController extends Controller{
 
     public function actionIndex(){
+        $this->view->registerJs("var API_URL = '" . $this->module->api_url . "'", View::POS_HEAD);
         return $this->render("index");
     }
 
@@ -25,27 +27,6 @@ class BackendController extends Controller{
             ),
         );
     }
-
-    /*public function actionView2($command){
-        preg_match("/([^.]*\.)?([^\(]*)\((.*)\)/", $command, $parsed);
-        $object = str_replace(".", "", $parsed[1]);
-
-        $method = $parsed[2];
-        $params = explode(",", $parsed[3]);
-
-
-        $object = \Yii::createObject('frontend\APIv1\\' . $object );
-
-        if(!$object){
-            $output = 'Не найден объект ' . $command;
-            return $this->render('view', ['output'=>$output]);
-        }
-
-        $output = call_user_func_array([$object, $method], $params);
-
-
-        return $this->render('view', ['output'=>$output]);
-    }*/
 
     public function behaviors()
     {
